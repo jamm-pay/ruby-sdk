@@ -6,12 +6,8 @@
   <p align="center">
     The official Ruby SDK for Jamm's payment API! We strongly recommend using the SDK for backend integration in order to simplify and streamline your development process!
     <br />
-    <a href="https://github.com/jamm-pay/Jamm-SDK-Ruby"><strong>Home »</strong></a>
+    <a href="https://github.com/jamm-pay/ruby-sdk"><strong>Home »</strong></a>
     <br />
-    <br />
-    <a href="https://github.com/jamm-pay/Jamm-SDK-Ruby/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/jamm-pay/Jamm-SDK-Ruby/issues">Request Feature</a>
   </p>
 </div>
 
