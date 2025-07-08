@@ -1,0 +1,17 @@
+.DS_Store
+.cache
+.dccache
+.env
+__debug_bin
+build
+CLAUDE.md
+coverage.txt
+coverage.log
+/deploy
+tmp
+mem.pprof
+*.backup*
+*.log
+*.tmp
+.env.*
+.idea
