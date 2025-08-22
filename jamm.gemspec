@@ -34,6 +34,6 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   s.metadata = {
-    'source_code_uri' => 'https://github.com/jamm-pay/Jamm-SDK-Ruby'
+    'source_code_uri' => 'https://github.com/jamm-pay/ruby-sdk'
   }
 end
