@@ -14,7 +14,9 @@ require 'jamm/version'
 require 'jamm/charge'
 require 'jamm/customer'
 require 'jamm/contract'
+require 'jamm/deprecation'
 require 'jamm/healthcheck'
+require 'jamm/payment'
 require 'jamm/webhook'
 
 # Patches
