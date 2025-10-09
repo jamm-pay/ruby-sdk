@@ -290,8 +290,8 @@ module Api
     # Get a list of charges for a customer
     # @param customer [String] @gotags: validate:\&quot;required\&quot;
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :pagination_page_size
-    # @option opts [String] :pagination_page_token
+    # @option opts [Integer] :pagination_page_size 
+    # @option opts [String] :pagination_page_token 
     # @return [GetChargesResponse]
     def get_charges(customer, opts = {})
       data, _status_code, _headers = get_charges_with_http_info(customer, opts)
@@ -302,8 +302,8 @@ module Api
     # Get a list of charges for a customer
     # @param customer [String] @gotags: validate:\&quot;required\&quot;
     # @param [Hash] opts the optional parameters
-    # @option opts [Integer] :pagination_page_size
-    # @option opts [String] :pagination_page_token
+    # @option opts [Integer] :pagination_page_size 
+    # @option opts [String] :pagination_page_token 
     # @return [Array<(GetChargesResponse, Integer, Hash)>] GetChargesResponse data, response status code and response headers
     def get_charges_with_http_info(customer, opts = {})
       if @api_client.config.debugging

@@ -20,6 +20,8 @@ module Api
 
     attr_accessor :email
 
+    attr_accessor :link_initialized
+
     attr_accessor :activated
 
     attr_accessor :status
@@ -35,6 +37,7 @@ module Api
       {
         :'id' => :'id',
         :'email' => :'email',
+        :'link_initialized' => :'linkInitialized',
         :'activated' => :'activated',
         :'status' => :'status',
         :'bank_information' => :'bankInformation',
@@ -53,6 +56,7 @@ module Api
       {
         :'id' => :'String',
         :'email' => :'String',
+        :'link_initialized' => :'Boolean',
         :'activated' => :'Boolean',
         :'status' => :'Apiv1Status',
         :'bank_information' => :'BankInformation',
@@ -88,6 +92,10 @@ module Api
 
       if attributes.key?(:'email')
         self.email = attributes[:'email']
+      end
+
+      if attributes.key?(:'link_initialized')
+        self.link_initialized = attributes[:'link_initialized']
       end
 
       if attributes.key?(:'activated')
@@ -133,6 +141,7 @@ module Api
       self.class == o.class &&
           id == o.id &&
           email == o.email &&
+          link_initialized == o.link_initialized &&
           activated == o.activated &&
           status == o.status &&
           bank_information == o.bank_information &&
@@ -149,7 +158,7 @@ module Api
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, email, activated, status, bank_information, created_at, updated_at].hash
+      [id, email, link_initialized, activated, status, bank_information, created_at, updated_at].hash
     end
 
     # Builds the object from hash

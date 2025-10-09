@@ -15,10 +15,10 @@ require 'time'
 
 module Api
   class URL
-    # URL to redirect the customer from Jamm to shop after payment is successful.  決済が成功した場合に、顧客をJammからショップへリダイレクトするURLです。  @gotags: validate:\"required,http_url\"
+    # URL to redirect the customer from Jamm to shop after payment is successful.  決済が成功した場合に、顧客をJammからショップへリダイレクトするURLです。  @gotags: validate:\"omitempty,http_url\"
     attr_accessor :success_url
 
-    # URL to redirect the customer from Jamm to shop after payment is failed.  決済が失敗した場合に、顧客をJammからショップへリダイレクトするURLです。  @gotags: validate:\"required,http_url\"
+    # URL to redirect the customer from Jamm to shop after payment is failed.  決済が失敗した場合に、顧客をJammからショップへリダイレクトするURLです。  @gotags: validate:\"omitempty,http_url\"
     attr_accessor :failure_url
 
     # Attribute mapping from ruby-style variable name to JSON key.

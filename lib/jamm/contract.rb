@@ -7,7 +7,7 @@ require 'jamm/errors'
 
 module Jamm
   module Contract
-    def self.create_with_charge(buyer:, charge:, redirect:)
+    def self.create_with_charge(buyer:, charge:, redirect: nil)
       request = Jamm::OpenAPI::CreateContractWithChargeRequest.new(
         buyer: buyer,
         charge: charge,
@@ -19,7 +19,7 @@ module Jamm
       raise Jamm::ApiError.from_error(e)
     end
 
-    def self.create_without_charge(buyer:, redirect:)
+    def self.create_without_charge(buyer:, redirect: nil)
       request = Jamm::OpenAPI::CreateContractWithoutChargeRequest.new(
         buyer: buyer,
         redirect: redirect

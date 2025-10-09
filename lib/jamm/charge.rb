@@ -8,7 +8,7 @@ require 'jamm/errors'
 module Jamm
   module Charge
     # DEPRECATED, use Jamm::Payment.on_session
-    def self.create_with_redirect(customer:, charge:, redirect:)
+    def self.create_with_redirect(customer:, charge:, redirect: nil)
       Jamm::Deprecation.warn('Jamm::Charge.create_with_redirect')
 
       request = Jamm::OpenAPI::AddChargeRequest.new(
