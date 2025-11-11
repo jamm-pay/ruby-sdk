@@ -22,6 +22,8 @@ module Api
 
     attr_accessor :name
 
+    attr_accessor :phone
+
     attr_accessor :katakana_last_name
 
     attr_accessor :katakana_first_name
@@ -41,6 +43,7 @@ module Api
         :'email' => :'email',
         :'force_kyc' => :'forceKyc',
         :'name' => :'name',
+        :'phone' => :'phone',
         :'katakana_last_name' => :'katakanaLastName',
         :'katakana_first_name' => :'katakanaFirstName',
         :'address' => :'address',
@@ -61,6 +64,7 @@ module Api
         :'email' => :'String',
         :'force_kyc' => :'Boolean',
         :'name' => :'String',
+        :'phone' => :'String',
         :'katakana_last_name' => :'String',
         :'katakana_first_name' => :'String',
         :'address' => :'String',
@@ -101,6 +105,10 @@ module Api
 
       if attributes.key?(:'name')
         self.name = attributes[:'name']
+      end
+
+      if attributes.key?(:'phone')
+        self.phone = attributes[:'phone']
       end
 
       if attributes.key?(:'katakana_last_name')
@@ -153,6 +161,7 @@ module Api
           email == o.email &&
           force_kyc == o.force_kyc &&
           name == o.name &&
+          phone == o.phone &&
           katakana_last_name == o.katakana_last_name &&
           katakana_first_name == o.katakana_first_name &&
           address == o.address &&
@@ -170,7 +179,7 @@ module Api
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [email, force_kyc, name, katakana_last_name, katakana_first_name, address, birth_date, gender, metadata].hash
+      [email, force_kyc, name, phone, katakana_last_name, katakana_first_name, address, birth_date, gender, metadata].hash
     end
 
     # Builds the object from hash
