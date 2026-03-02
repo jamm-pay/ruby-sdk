@@ -7,18 +7,20 @@ require 'jamm/errors'
 
 module Jamm
   module Payment
-    def self.on_session(charge:, redirect: nil, customer: nil, buyer: nil)
+    def self.on_session(charge: nil, redirect: nil, customer: nil, buyer: nil, one_time: false)
       request = if customer.nil?
                   Jamm::OpenAPI::OnSessionPaymentRequest.new(
                     buyer: buyer,
                     charge: charge,
-                    redirect: redirect
+                    redirect: redirect,
+                    one_time: one_time
                   )
                 else
                   Jamm::OpenAPI::OnSessionPaymentRequest.new(
                     customer: customer,
                     charge: charge,
-                    redirect: redirect
+                    redirect: redirect,
+                    one_time: one_time
                   )
                 end
 

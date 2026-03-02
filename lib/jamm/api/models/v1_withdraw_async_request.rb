@@ -14,27 +14,17 @@ require 'date'
 require 'time'
 
 module Api
-  # Request message for the unified payment interface. The system intelligently routes the request to the appropriate payment method based on the provided parameters.
-  class OnSessionPaymentRequest
+  # This message represents a request to withdraw money from a customer asynchronously. It contains the customer ID and the amount to withdraw.
+  class WithdrawAsyncRequest
     attr_accessor :customer
 
-    attr_accessor :buyer
-
     attr_accessor :charge
-
-    # Defaults to false if not provided. If true, the charge is processed as a one-time payment and no contract is created. If provided without a customer ID, the system will create a new customer. Requires charge to be present.  未指定の場合はfalseがデフォルトです。 trueの場合、決済は一回限りの支払いとして処理され、契約は作成されません。 customer IDが提供されていない場合、新規顧客が作成されます。 chargeが必須です。
-    attr_accessor :one_time
-
-    attr_accessor :redirect
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
         :'customer' => :'customer',
-        :'buyer' => :'buyer',
-        :'charge' => :'charge',
-        :'one_time' => :'oneTime',
-        :'redirect' => :'redirect'
+        :'charge' => :'charge'
       }
     end
 
@@ -47,10 +37,7 @@ module Api
     def self.openapi_types
       {
         :'customer' => :'String',
-        :'buyer' => :'Buyer',
-        :'charge' => :'InitialCharge',
-        :'one_time' => :'Boolean',
-        :'redirect' => :'URL'
+        :'charge' => :'InitialCharge'
       }
     end
 
@@ -64,13 +51,13 @@ module Api
     # @param [Hash] attributes Model attributes in the form of hash
     def initialize(attributes = {})
       if (!attributes.is_a?(Hash))
-        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::OnSessionPaymentRequest` initialize method"
+        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::WithdrawAsyncRequest` initialize method"
       end
 
       # check to see if the attribute exists and convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h|
         if (!self.class.attribute_map.key?(k.to_sym))
-          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::OnSessionPaymentRequest`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
+          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::WithdrawAsyncRequest`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
         end
         h[k.to_sym] = v
       }
@@ -79,20 +66,8 @@ module Api
         self.customer = attributes[:'customer']
       end
 
-      if attributes.key?(:'buyer')
-        self.buyer = attributes[:'buyer']
-      end
-
       if attributes.key?(:'charge')
         self.charge = attributes[:'charge']
-      end
-
-      if attributes.key?(:'one_time')
-        self.one_time = attributes[:'one_time']
-      end
-
-      if attributes.key?(:'redirect')
-        self.redirect = attributes[:'redirect']
       end
     end
 
@@ -117,10 +92,7 @@ module Api
       return true if self.equal?(o)
       self.class == o.class &&
           customer == o.customer &&
-          buyer == o.buyer &&
-          charge == o.charge &&
-          one_time == o.one_time &&
-          redirect == o.redirect
+          charge == o.charge
     end
 
     # @see the `==` method
@@ -132,7 +104,7 @@ module Api
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [customer, buyer, charge, one_time, redirect].hash
+      [customer, charge].hash
     end
 
     # Builds the object from hash

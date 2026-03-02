@@ -23,13 +23,16 @@ module Api
 
     attr_accessor :payment_link
 
+    attr_accessor :one_time
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
         :'contract' => :'contract',
         :'charge' => :'charge',
         :'customer' => :'customer',
-        :'payment_link' => :'paymentLink'
+        :'payment_link' => :'paymentLink',
+        :'one_time' => :'oneTime'
       }
     end
 
@@ -44,7 +47,8 @@ module Api
         :'contract' => :'Contract',
         :'charge' => :'Charge',
         :'customer' => :'Customer',
-        :'payment_link' => :'PaymentLink'
+        :'payment_link' => :'PaymentLink',
+        :'one_time' => :'Boolean'
       }
     end
 
@@ -84,6 +88,10 @@ module Api
       if attributes.key?(:'payment_link')
         self.payment_link = attributes[:'payment_link']
       end
+
+      if attributes.key?(:'one_time')
+        self.one_time = attributes[:'one_time']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -109,7 +117,8 @@ module Api
           contract == o.contract &&
           charge == o.charge &&
           customer == o.customer &&
-          payment_link == o.payment_link
+          payment_link == o.payment_link &&
+          one_time == o.one_time
     end
 
     # @see the `==` method
@@ -121,7 +130,7 @@ module Api
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [contract, charge, customer, payment_link].hash
+      [contract, charge, customer, payment_link, one_time].hash
     end
 
     # Builds the object from hash

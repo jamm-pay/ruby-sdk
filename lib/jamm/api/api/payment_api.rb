@@ -355,6 +355,142 @@ module Api
       return data, status_code, headers
     end
 
+    # Initiate async withdraw (internal)
+    # Internal-only endpoint for initiating asynchronous withdrawal processing.
+    # @param body [WithdrawAsyncRequest] This message represents a request to withdraw money from a customer asynchronously. It contains the customer ID and the amount to withdraw.
+    # @param [Hash] opts the optional parameters
+    # @return [WithdrawAsyncResponse]
+    def internal_withdraw_async(body, opts = {})
+      data, _status_code, _headers = internal_withdraw_async_with_http_info(body, opts)
+      data
+    end
+
+    # Initiate async withdraw (internal)
+    # Internal-only endpoint for initiating asynchronous withdrawal processing.
+    # @param body [WithdrawAsyncRequest] This message represents a request to withdraw money from a customer asynchronously. It contains the customer ID and the amount to withdraw.
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(WithdrawAsyncResponse, Integer, Hash)>] WithdrawAsyncResponse data, response status code and response headers
+    def internal_withdraw_async_with_http_info(body, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: PaymentApi.internal_withdraw_async ...'
+      end
+      # verify the required parameter 'body' is set
+      if @api_client.config.client_side_validation && body.nil?
+        fail ArgumentError, "Missing the required parameter 'body' when calling PaymentApi.internal_withdraw_async"
+      end
+      # resource path
+      local_var_path = '/v1/withdraw/async'
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+      # HTTP header 'Content-Type'
+      content_type = @api_client.select_header_content_type(['application/json'])
+      if !content_type.nil?
+          header_params['Content-Type'] = content_type
+      end
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body] || @api_client.object_to_http_body(body)
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'WithdrawAsyncResponse'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || []
+
+      new_options = opts.merge(
+        :operation => :"PaymentApi.internal_withdraw_async",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:POST, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: PaymentApi#internal_withdraw_async\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    # Get async withdraw status (internal)
+    # Internal-only endpoint for retrieving async withdraw processing status.
+    # @param body [WithdrawAsyncStatusRequest] This message represents a request to get the status of an asynchronous withdrawal.
+    # @param [Hash] opts the optional parameters
+    # @return [WithdrawAsyncStatusResponse]
+    def internal_withdraw_async_status(body, opts = {})
+      data, _status_code, _headers = internal_withdraw_async_status_with_http_info(body, opts)
+      data
+    end
+
+    # Get async withdraw status (internal)
+    # Internal-only endpoint for retrieving async withdraw processing status.
+    # @param body [WithdrawAsyncStatusRequest] This message represents a request to get the status of an asynchronous withdrawal.
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(WithdrawAsyncStatusResponse, Integer, Hash)>] WithdrawAsyncStatusResponse data, response status code and response headers
+    def internal_withdraw_async_status_with_http_info(body, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: PaymentApi.internal_withdraw_async_status ...'
+      end
+      # verify the required parameter 'body' is set
+      if @api_client.config.client_side_validation && body.nil?
+        fail ArgumentError, "Missing the required parameter 'body' when calling PaymentApi.internal_withdraw_async_status"
+      end
+      # resource path
+      local_var_path = '/v1/withdraw/async/status'
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+      # HTTP header 'Content-Type'
+      content_type = @api_client.select_header_content_type(['application/json'])
+      if !content_type.nil?
+          header_params['Content-Type'] = content_type
+      end
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body] || @api_client.object_to_http_body(body)
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'WithdrawAsyncStatusResponse'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || []
+
+      new_options = opts.merge(
+        :operation => :"PaymentApi.internal_withdraw_async_status",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:POST, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: PaymentApi#internal_withdraw_async_status\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
     # Process payment directly without redirect
     # Execute a payment off-session within your application without redirecting to a payment page.
     # @param body [OffSessionPaymentRequest] This message represents a request to process a payment directly within the application. It contains the customer ID and charge details to be processed.

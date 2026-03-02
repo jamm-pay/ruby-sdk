@@ -25,6 +25,7 @@ require 'jamm/api_patches'
 # Jamm Ruby SDK
 module Jamm
   # Configurable attributes.
+  @environment = nil
   @oauth_base = nil
   @openapi = nil
   @open_timeout = 30
@@ -32,7 +33,7 @@ module Jamm
   @max_retry = 0
 
   class << self
-    attr_accessor :api, :client_id, :client_secret, :api_base, :env, :oauth_base, :api_version, :connect_base,
+    attr_accessor :api, :client_id, :client_secret, :api_base, :environment, :oauth_base, :api_version, :connect_base,
                   :openapi, :open_timeout, :read_timeout, :max_retry, :retry_initial_delay, :retry_max_delay
   end
 
@@ -44,12 +45,14 @@ module Jamm
     when 'prd', 'prod', 'production'
       self.oauth_base = 'https://merchant-identity.jamm-pay.jp'
 
+      self.environment = 'production'
       self.openapi = Jamm::OpenAPI::ApiClient.new
       openapi.config.host = 'api.jamm-pay.jp'
 
     when 'local'
       self.oauth_base = 'https://merchant-identity.develop.jamm-pay.jp'
 
+      self.environment = 'local'
       self.openapi = Jamm::OpenAPI::ApiClient.new
       openapi.config.host = 'api.jamm.test'
       openapi.config.verify_ssl = false
@@ -57,6 +60,7 @@ module Jamm
     else
       self.oauth_base = "https://merchant-identity.#{env}.jamm-pay.jp"
 
+      self.environment = env
       self.openapi = Jamm::OpenAPI::ApiClient.new
       openapi.config.host = "api.#{env}.jamm-pay.jp"
     end
