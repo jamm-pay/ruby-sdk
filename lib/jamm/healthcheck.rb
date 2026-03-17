@@ -7,8 +7,9 @@ require 'jamm/errors'
 
 module Jamm
   module Healthcheck
-    def self.ping
-      Jamm::OpenAPI::HealthcheckApi.new(Jamm::Client.handler).ping
+    def self.ping(merchant: nil)
+      handler = Jamm::Client.handler(merchant: merchant)
+      Jamm::OpenAPI::HealthcheckApi.new(handler).ping
     rescue Jamm::OpenAPI::ApiError => e
       raise Jamm::ApiError.from_error(e)
     end

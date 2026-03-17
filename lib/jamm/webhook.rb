@@ -22,7 +22,7 @@ module Jamm
         out.content = Jamm::OpenAPI::ChargeMessage.new(json[:content])
         return out
 
-      when Jamm::OpenAPI::EventType::CHARGE_CANCEL
+      when Jamm::OpenAPI::EventType::CHARGE_REFUND
         out.content = Jamm::OpenAPI::ChargeMessage.new(json[:content])
         return out
 
@@ -42,7 +42,8 @@ module Jamm
       raise 'Unknown event type'
     end
 
-    # Verify message
+    # Verify message.
+    # This method will use client secret to verify the message.
     def self.verify(data:, signature:)
       raise ArgumentError, 'data cannot be nil' if data.nil?
       raise ArgumentError, 'signature cannot be nil' if signature.nil?

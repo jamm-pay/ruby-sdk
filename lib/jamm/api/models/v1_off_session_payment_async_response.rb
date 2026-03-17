@@ -14,8 +14,8 @@ require 'date'
 require 'time'
 
 module Api
-  # This message represents the asynchronous response after initiating a withdrawal.
-  class WithdrawAsyncResponse
+  # This message represents the asynchronous response after initiating an off-session payment.
+  class OffSessionPaymentAsyncResponse
     attr_accessor :request_id
 
     attr_accessor :status
@@ -77,13 +77,13 @@ module Api
     # @param [Hash] attributes Model attributes in the form of hash
     def initialize(attributes = {})
       if (!attributes.is_a?(Hash))
-        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::WithdrawAsyncResponse` initialize method"
+        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::OffSessionPaymentAsyncResponse` initialize method"
       end
 
       # check to see if the attribute exists and convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h|
         if (!self.class.attribute_map.key?(k.to_sym))
-          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::WithdrawAsyncResponse`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
+          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::OffSessionPaymentAsyncResponse`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
         end
         h[k.to_sym] = v
       }

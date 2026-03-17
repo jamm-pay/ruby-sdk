@@ -16,8 +16,10 @@ module Jamm
     KycStatus = Jamm::OpenAPI::KycStatus
     PaymentAuthorizationStatus = Jamm::OpenAPI::PaymentAuthorizationStatus
 
-    def self.create(buyer:)
-      r = Jamm::OpenAPI::CustomerApi.new(Jamm::Client.handler).create(
+    def self.create(buyer:, merchant: nil)
+      handler = Jamm::Client.handler(merchant: merchant)
+
+      r = Jamm::OpenAPI::CustomerApi.new(handler).create(
         buyer: buyer
       )
 
@@ -26,8 +28,10 @@ module Jamm
       raise Jamm::ApiError.from_error(e)
     end
 
-    def self.get(id_or_email)
-      r = Jamm::OpenAPI::CustomerApi.new(Jamm::Client.handler).get(id_or_email)
+    def self.get(id_or_email, merchant: nil)
+      handler = Jamm::Client.handler(merchant: merchant)
+
+      r = Jamm::OpenAPI::CustomerApi.new(handler).get(id_or_email)
 
       if r.customer.activated.nil?
         # Activated flag requires explicit binding on false, since RPC/OpenAPI does
@@ -40,24 +44,27 @@ module Jamm
       raise Jamm::ApiError.from_error(e)
     end
 
-    def self.get_contract(id)
-      Jamm::OpenAPI::CustomerApi.new(Jamm::Client.handler).get_contract(id)
+    def self.get_contract(id, merchant: nil)
+      handler = Jamm::Client.handler(merchant: merchant)
+      Jamm::OpenAPI::CustomerApi.new(handler).get_contract(id)
     rescue Jamm::OpenAPI::ApiError => e
       return nil if [404].include?(e.code)
 
       raise Jamm::ApiError.from_error(e)
     end
 
-    def self.update(id, params)
-      r = Jamm::OpenAPI::CustomerApi.new(Jamm::Client.handler).update(id, params)
+    def self.update(id, params, merchant: nil)
+      handler = Jamm::Client.handler(merchant: merchant)
+      r = Jamm::OpenAPI::CustomerApi.new(handler).update(id, params)
 
       r.customer
     rescue Jamm::OpenAPI::ApiError => e
       raise Jamm::ApiError.from_error(e)
     end
 
-    def self.delete(id)
-      Jamm::OpenAPI::CustomerApi.new(Jamm::Client.handler).delete(id)
+    def self.delete(id, merchant: nil)
+      handler = Jamm::Client.handler(merchant: merchant)
+      Jamm::OpenAPI::CustomerApi.new(handler).delete(id)
     rescue Jamm::OpenAPI::ApiError => e
       raise Jamm::ApiError.from_error(e)
     end

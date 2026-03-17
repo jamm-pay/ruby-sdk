@@ -559,6 +559,74 @@ module Api
       return data, status_code, headers
     end
 
+    # Initiate async off-session payment
+    # Starts asynchronous off-session payment processing and returns request tracking information.
+    # @param body [OffSessionPaymentAsyncRequest] This message represents a request to process an off-session payment asynchronously. It contains the customer ID and the amount to charge.
+    # @param [Hash] opts the optional parameters
+    # @return [OffSessionPaymentAsyncResponse]
+    def off_session_payment_async(body, opts = {})
+      data, _status_code, _headers = off_session_payment_async_with_http_info(body, opts)
+      data
+    end
+
+    # Initiate async off-session payment
+    # Starts asynchronous off-session payment processing and returns request tracking information.
+    # @param body [OffSessionPaymentAsyncRequest] This message represents a request to process an off-session payment asynchronously. It contains the customer ID and the amount to charge.
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(OffSessionPaymentAsyncResponse, Integer, Hash)>] OffSessionPaymentAsyncResponse data, response status code and response headers
+    def off_session_payment_async_with_http_info(body, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: PaymentApi.off_session_payment_async ...'
+      end
+      # verify the required parameter 'body' is set
+      if @api_client.config.client_side_validation && body.nil?
+        fail ArgumentError, "Missing the required parameter 'body' when calling PaymentApi.off_session_payment_async"
+      end
+      # resource path
+      local_var_path = '/v1/payments/off-session/async'
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+      # HTTP header 'Content-Type'
+      content_type = @api_client.select_header_content_type(['application/json'])
+      if !content_type.nil?
+          header_params['Content-Type'] = content_type
+      end
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body] || @api_client.object_to_http_body(body)
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'OffSessionPaymentAsyncResponse'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || []
+
+      new_options = opts.merge(
+        :operation => :"PaymentApi.off_session_payment_async",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:POST, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: PaymentApi#off_session_payment_async\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
     # Process payment with optional redirect
     # Unified interface for creating payments - supports existing customers, new customers with charges, and contract-only creation.
     # @param body [OnSessionPaymentRequest] Request message for the unified payment interface. The system intelligently routes the request to the appropriate payment method based on the provided parameters.
@@ -623,6 +691,74 @@ module Api
       data, status_code, headers = @api_client.call_api(:POST, local_var_path, new_options)
       if @api_client.config.debugging
         @api_client.config.logger.debug "API called: PaymentApi#on_session_payment\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
+      end
+      return data, status_code, headers
+    end
+
+    # Refund a charge
+    # Refunds a charge. If the same-day cancellation window has not passed, cancels the charge directly. Otherwise, creates a bank transfer refund request.
+    # @param body [RefundRequest] Request message for refunding a charge. The refund is always processed asynchronously. The final result is delivered via webhook (&#x60;charge_refund&#x60;).
+    # @param [Hash] opts the optional parameters
+    # @return [RefundResponse]
+    def refund(body, opts = {})
+      data, _status_code, _headers = refund_with_http_info(body, opts)
+      data
+    end
+
+    # Refund a charge
+    # Refunds a charge. If the same-day cancellation window has not passed, cancels the charge directly. Otherwise, creates a bank transfer refund request.
+    # @param body [RefundRequest] Request message for refunding a charge. The refund is always processed asynchronously. The final result is delivered via webhook (&#x60;charge_refund&#x60;).
+    # @param [Hash] opts the optional parameters
+    # @return [Array<(RefundResponse, Integer, Hash)>] RefundResponse data, response status code and response headers
+    def refund_with_http_info(body, opts = {})
+      if @api_client.config.debugging
+        @api_client.config.logger.debug 'Calling API: PaymentApi.refund ...'
+      end
+      # verify the required parameter 'body' is set
+      if @api_client.config.client_side_validation && body.nil?
+        fail ArgumentError, "Missing the required parameter 'body' when calling PaymentApi.refund"
+      end
+      # resource path
+      local_var_path = '/v1/refund'
+
+      # query parameters
+      query_params = opts[:query_params] || {}
+
+      # header parameters
+      header_params = opts[:header_params] || {}
+      # HTTP header 'Accept' (if needed)
+      header_params['Accept'] = @api_client.select_header_accept(['application/json']) unless header_params['Accept']
+      # HTTP header 'Content-Type'
+      content_type = @api_client.select_header_content_type(['application/json'])
+      if !content_type.nil?
+          header_params['Content-Type'] = content_type
+      end
+
+      # form parameters
+      form_params = opts[:form_params] || {}
+
+      # http body (model)
+      post_body = opts[:debug_body] || @api_client.object_to_http_body(body)
+
+      # return_type
+      return_type = opts[:debug_return_type] || 'RefundResponse'
+
+      # auth_names
+      auth_names = opts[:debug_auth_names] || []
+
+      new_options = opts.merge(
+        :operation => :"PaymentApi.refund",
+        :header_params => header_params,
+        :query_params => query_params,
+        :form_params => form_params,
+        :body => post_body,
+        :auth_names => auth_names,
+        :return_type => return_type
+      )
+
+      data, status_code, headers = @api_client.call_api(:POST, local_var_path, new_options)
+      if @api_client.config.debugging
+        @api_client.config.logger.debug "API called: PaymentApi#refund\nData: #{data.inspect}\nStatus code: #{status_code}\nHeaders: #{headers}"
       end
       return data, status_code, headers
     end

@@ -7,7 +7,15 @@ require 'jamm/errors'
 
 module Jamm
   module Payment
-    def self.on_session(charge: nil, redirect: nil, customer: nil, buyer: nil, one_time: false)
+    def self.on_session(
+      charge: nil,
+      redirect: nil,
+      customer: nil,
+      buyer: nil,
+      one_time: false,
+      # Platform can set merchant id to call on behalf of the merchant.
+      merchant: nil
+    )
       request = if customer.nil?
                   Jamm::OpenAPI::OnSessionPaymentRequest.new(
                     buyer: buyer,
@@ -24,32 +32,44 @@ module Jamm
                   )
                 end
 
-      Jamm::OpenAPI::PaymentApi.new(Jamm::Client.handler).on_session_payment(request)
+      handler = Jamm::Client.handler(merchant: merchant)
+      Jamm::OpenAPI::PaymentApi.new(handler).on_session_payment(request)
     rescue Jamm::OpenAPI::ApiError => e
       raise Jamm::ApiError.from_error(e)
     end
 
-    def self.off_session(customer:, charge:)
+    def self.off_session(customer:, charge:, merchant: nil)
       request = Jamm::OpenAPI::OffSessionPaymentRequest.new(
         customer: customer,
         charge: charge
       )
 
-      Jamm::OpenAPI::PaymentApi.new(Jamm::Client.handler).off_session_payment(request)
+      handler = Jamm::Client.handler(merchant: merchant)
+      Jamm::OpenAPI::PaymentApi.new(handler).off_session_payment(request)
     rescue Jamm::OpenAPI::ApiError => e
       raise Jamm::ApiError.from_error(e)
     end
 
-    def self.get(charge_id)
-      Jamm::OpenAPI::PaymentApi.new(Jamm::Client.handler).get_charge(charge_id)
+    def self.get(charge_id, merchant: nil)
+      handler = Jamm::Client.handler(merchant: merchant)
+
+      Jamm::OpenAPI::PaymentApi.new(handler).get_charge(charge_id)
     rescue Jamm::OpenAPI::ApiError => e
       return nil if e.code == 404
 
       raise Jamm::ApiError.from_error(e)
     end
 
-    def self.list(customer:, pagination: nil)
-      Jamm::OpenAPI::PaymentApi.new(Jamm::Client.handler).get_charges(customer, pagination.nil? ? {} : pagination)
+    def self.refund(request, merchant: nil)
+      handler = Jamm::Client.handler(merchant: merchant)
+      Jamm::OpenAPI::PaymentApi.new(handler).refund(request)
+    rescue Jamm::OpenAPI::ApiError => e
+      raise Jamm::ApiError.from_error(e)
+    end
+
+    def self.list(customer:, pagination: nil, merchant: nil)
+      handler = Jamm::Client.handler(merchant: merchant)
+      Jamm::OpenAPI::PaymentApi.new(handler).get_charges(customer, pagination.nil? ? {} : pagination)
     rescue Jamm::OpenAPI::ApiError => e
       if [404].include?(e.code)
         nil

@@ -5,7 +5,7 @@ module Api
     # Allow to drill down to list charges.
     # e.g. cus.charges --> []
     def charges(pagination: nil)
-      Jamm::Charge.list(
+      Jamm::Payment.list(
         customer: id,
         pagination: pagination
       )

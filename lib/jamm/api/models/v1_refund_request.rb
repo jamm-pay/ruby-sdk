@@ -14,42 +14,19 @@ require 'date'
 require 'time'
 
 module Api
-  # This message represents the asynchronous response after initiating a withdrawal.
-  class WithdrawAsyncResponse
-    attr_accessor :request_id
-
-    attr_accessor :status
-
+  # Request message for refunding a charge. The refund is always processed asynchronously. The final result is delivered via webhook (`charge_refund`).
+  class RefundRequest
+    # The charge ID to refund.  返金する決済のID。  @gotags: validate:\"required\"
     attr_accessor :charge_id
 
-    class EnumAttributeValidator
-      attr_reader :datatype
-      attr_reader :allowable_values
-
-      def initialize(datatype, allowable_values)
-        @allowable_values = allowable_values.map do |value|
-          case datatype.to_s
-          when /Integer/i
-            value.to_i
-          when /Float/i
-            value.to_f
-          else
-            value
-          end
-        end
-      end
-
-      def valid?(value)
-        !value || allowable_values.include?(value)
-      end
-    end
+    # Optional refund amount in JPY. If omitted, the full refundable amount is used.  返金金額（日本円）。 省略した場合、全額返金となります。
+    attr_accessor :amount
 
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'request_id' => :'requestId',
-        :'status' => :'status',
-        :'charge_id' => :'chargeId'
+        :'charge_id' => :'chargeId',
+        :'amount' => :'amount'
       }
     end
 
@@ -61,9 +38,8 @@ module Api
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'request_id' => :'String',
-        :'status' => :'AsyncStatus',
-        :'charge_id' => :'String'
+        :'charge_id' => :'String',
+        :'amount' => :'Integer'
       }
     end
 
@@ -77,29 +53,23 @@ module Api
     # @param [Hash] attributes Model attributes in the form of hash
     def initialize(attributes = {})
       if (!attributes.is_a?(Hash))
-        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::WithdrawAsyncResponse` initialize method"
+        fail ArgumentError, "The input argument (attributes) must be a hash in `Api::RefundRequest` initialize method"
       end
 
       # check to see if the attribute exists and convert string to symbol for hash key
       attributes = attributes.each_with_object({}) { |(k, v), h|
         if (!self.class.attribute_map.key?(k.to_sym))
-          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::WithdrawAsyncResponse`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
+          fail ArgumentError, "`#{k}` is not a valid attribute in `Api::RefundRequest`. Please check the name to make sure it's valid. List of attributes: " + self.class.attribute_map.keys.inspect
         end
         h[k.to_sym] = v
       }
 
-      if attributes.key?(:'request_id')
-        self.request_id = attributes[:'request_id']
-      end
-
-      if attributes.key?(:'status')
-        self.status = attributes[:'status']
-      else
-        self.status = 'ASYNC_STATUS_UNSPECIFIED'
-      end
-
       if attributes.key?(:'charge_id')
         self.charge_id = attributes[:'charge_id']
+      end
+
+      if attributes.key?(:'amount')
+        self.amount = attributes[:'amount']
       end
     end
 
@@ -123,9 +93,8 @@ module Api
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          request_id == o.request_id &&
-          status == o.status &&
-          charge_id == o.charge_id
+          charge_id == o.charge_id &&
+          amount == o.amount
     end
 
     # @see the `==` method
@@ -137,7 +106,7 @@ module Api
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [request_id, status, charge_id].hash
+      [charge_id, amount].hash
     end
 
     # Builds the object from hash

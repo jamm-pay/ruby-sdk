@@ -48,6 +48,30 @@ module Api
 
     attr_accessor :processed_at
 
+    attr_accessor :charge_status
+
+    class EnumAttributeValidator
+      attr_reader :datatype
+      attr_reader :allowable_values
+
+      def initialize(datatype, allowable_values)
+        @allowable_values = allowable_values.map do |value|
+          case datatype.to_s
+          when /Integer/i
+            value.to_i
+          when /Float/i
+            value.to_f
+          else
+            value
+          end
+        end
+      end
+
+      def valid?(value)
+        !value || allowable_values.include?(value)
+      end
+    end
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
@@ -65,7 +89,8 @@ module Api
         :'metadata' => :'metadata',
         :'created_at' => :'createdAt',
         :'updated_at' => :'updatedAt',
-        :'processed_at' => :'processedAt'
+        :'processed_at' => :'processedAt',
+        :'charge_status' => :'chargeStatus'
       }
     end
 
@@ -91,7 +116,8 @@ module Api
         :'metadata' => :'Hash<String, String>',
         :'created_at' => :'Time',
         :'updated_at' => :'Time',
-        :'processed_at' => :'Time'
+        :'processed_at' => :'Time',
+        :'charge_status' => :'ChargeStatus'
       }
     end
 
@@ -177,6 +203,12 @@ module Api
       if attributes.key?(:'processed_at')
         self.processed_at = attributes[:'processed_at']
       end
+
+      if attributes.key?(:'charge_status')
+        self.charge_status = attributes[:'charge_status']
+      else
+        self.charge_status = 'CHARGE_STATUS_UNSPECIFIED'
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -213,7 +245,8 @@ module Api
           metadata == o.metadata &&
           created_at == o.created_at &&
           updated_at == o.updated_at &&
-          processed_at == o.processed_at
+          processed_at == o.processed_at &&
+          charge_status == o.charge_status
     end
 
     # @see the `==` method
@@ -225,7 +258,7 @@ module Api
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [charge_id, paid, reason, description, merchant_name, initial_amount, discount, final_amount, amount_refunded, currency, token_id, metadata, created_at, updated_at, processed_at].hash
+      [charge_id, paid, reason, description, merchant_name, initial_amount, discount, final_amount, amount_refunded, currency, token_id, metadata, created_at, updated_at, processed_at, charge_status].hash
     end
 
     # Builds the object from hash
