@@ -22,7 +22,7 @@ module Api
     # Amount of the charge in Japanese Yen. The amount must be the total price of the product/service including tax.  決済金額。日本円で指定してください。 金額は商品/サービスの合計金額 (税込) を指定してください。  @gotags: validate:\"gte=1,lte=500000\"
     attr_accessor :price
 
-    # Description is an arbitrary string for merchant to track the charge. This information is displayed on Merchant Dashboard.  決済の説明。ショップが決済を追跡するための任意の文字列です。  @gotags: validate:\"required\"
+    # Description is an arbitrary string for merchant to track the charge. This information is displayed on Merchant Dashboard.  決済の説明。ショップが決済を追跡するための任意の文字列です。  @gotags: validate:\"required,max=1024\"
     attr_accessor :description
 
     # Arbitrary key-value additional information about the charge. You can see this information in our merchant dashboard.  Chargeに関する任意のキーと値の追加情報。 加盟店ダッシュボードで確認できます。

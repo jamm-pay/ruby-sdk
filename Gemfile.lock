@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    jamm (2.0.0)
+    jamm (2.1.0)
       rest-client (~> 2.0)
       typhoeus (~> 1.0, >= 1.0.1)
 

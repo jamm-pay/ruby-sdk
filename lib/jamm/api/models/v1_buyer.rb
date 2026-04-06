@@ -22,7 +22,7 @@ module Api
     # A flag whether Jamm to force KYC for the customer.  初回購入時に購入者に対してKYCを強制するかどうかのフラグです。
     attr_accessor :force_kyc
 
-    # Phone number of the customer. You can update this value later through the UpdateCustomer endpoint.  e.g. - 09012345678  Customerの電話番号。 この値は UpdateCustomer エンドポイントを通じて後で更新できます。
+    # Phone number of the customer. You can update this value later through the UpdateCustomer endpoint. Accepts Japanese phone numbers (10-11 digits). Note that only mobile numbers (070/080/090) will be stored; non-mobile numbers are silently ignored.  e.g. - 09012345678 (mobile) - 08012345678 (mobile) - 07012345678 (mobile) - 05012345678 (IP phone, not stored) - 0312345678  (landline, not stored)  Customerの電話番号。 この値は UpdateCustomer エンドポイントを通じて後で更新できます。 携帯電話番号（070/080/090）のみ保存され、それ以外の番号は無視されます。
     attr_accessor :phone
 
     # Name of the customer. You can update this value later through the UpdateCustomer endpoint.  e.g. - John Appleseed - 山田太郎  購入者の氏名。 この値は UpdateCustomer エンドポイントを通じて後で更新できます。

@@ -22,7 +22,11 @@ module Jamm
         out.content = Jamm::OpenAPI::ChargeMessage.new(json[:content])
         return out
 
-      when Jamm::OpenAPI::EventType::CHARGE_REFUND
+      when Jamm::OpenAPI::EventType::REFUND_SUCCEEDED
+        out.content = Jamm::OpenAPI::ChargeMessage.new(json[:content])
+        return out
+
+      when Jamm::OpenAPI::EventType::REFUND_FAILED
         out.content = Jamm::OpenAPI::ChargeMessage.new(json[:content])
         return out
 

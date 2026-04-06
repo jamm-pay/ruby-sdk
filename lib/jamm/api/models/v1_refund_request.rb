@@ -14,7 +14,7 @@ require 'date'
 require 'time'
 
 module Api
-  # Request message for refunding a charge. The refund is always processed asynchronously. The final result is delivered via webhook (`charge_refund`).
+  # Request message for refunding a charge. The refund is always processed asynchronously. The final result is delivered via webhook (`refund_succeeded`).
   class RefundRequest
     # The charge ID to refund.  返金する決済のID。  @gotags: validate:\"required\"
     attr_accessor :charge_id
@@ -22,11 +22,15 @@ module Api
     # Optional refund amount in JPY. If omitted, the full refundable amount is used.  返金金額（日本円）。 省略した場合、全額返金となります。
     attr_accessor :amount
 
+    # When true, only attempts cancellation without falling back to bank transfer refund. Defaults to false (fallback enabled).  trueの場合、キャンセルのみを試行し、銀行振込返金への フォールバックを行いません。デフォルトはfalse（フォールバック有効）。
+    attr_accessor :cancel_only
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
         :'charge_id' => :'chargeId',
-        :'amount' => :'amount'
+        :'amount' => :'amount',
+        :'cancel_only' => :'cancelOnly'
       }
     end
 
@@ -39,7 +43,8 @@ module Api
     def self.openapi_types
       {
         :'charge_id' => :'String',
-        :'amount' => :'Integer'
+        :'amount' => :'Integer',
+        :'cancel_only' => :'Boolean'
       }
     end
 
@@ -71,6 +76,10 @@ module Api
       if attributes.key?(:'amount')
         self.amount = attributes[:'amount']
       end
+
+      if attributes.key?(:'cancel_only')
+        self.cancel_only = attributes[:'cancel_only']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -94,7 +103,8 @@ module Api
       return true if self.equal?(o)
       self.class == o.class &&
           charge_id == o.charge_id &&
-          amount == o.amount
+          amount == o.amount &&
+          cancel_only == o.cancel_only
     end
 
     # @see the `==` method
@@ -106,7 +116,7 @@ module Api
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [charge_id, amount].hash
+      [charge_id, amount, cancel_only].hash
     end
 
     # Builds the object from hash

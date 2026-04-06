@@ -21,9 +21,10 @@ module Api
     WAITING_EKYC = "STATUS_WAITING_EKYC".freeze
     BLOCKING = "STATUS_BLOCKING".freeze
     CANCELLED = "STATUS_CANCELLED".freeze
+    REFUNDED = "STATUS_REFUNDED".freeze
 
     def self.all_vars
-      @all_vars ||= [UNSPECIFIED, SUCCESS, FAILURE, WAITING_EKYC, BLOCKING, CANCELLED].freeze
+      @all_vars ||= [UNSPECIFIED, SUCCESS, FAILURE, WAITING_EKYC, BLOCKING, CANCELLED, REFUNDED].freeze
     end
 
     # Builds the enum from string

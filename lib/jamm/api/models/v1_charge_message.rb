@@ -25,23 +25,42 @@ module Api
 
     attr_accessor :merchant_name
 
+    # Original charge amount before discount and before any refund is applied.
     attr_accessor :initial_amount
 
+    # Discount amount deducted from the original charge amount.
     attr_accessor :discount
 
+    # Final charge amount after discount, before any refund is applied.
     attr_accessor :final_amount
 
+    # Total amount refunded for this charge when the charge has been refunded.
     attr_accessor :amount_refunded
 
     attr_accessor :currency
 
+    # Timestamp when the charge or refund outcome was completed.
     attr_accessor :processed_at
+
+    # Jamm fee associated with this refund event (refund uses refund fee; cancel uses 0).
+    attr_accessor :jamm_fee
 
     attr_accessor :created_at
 
     attr_accessor :updated_at
 
+    # Whether the original transaction's Jamm fee was waived (same-day cancel) or not (refund). Values: \"waived\", \"not_waived\".
+    attr_accessor :original_transaction_jamm_fee
+
+    # Consumption tax (10% of the Jamm fee).
+    attr_accessor :consumption_tax
+
     attr_accessor :error
+
+    # External refund identifier (rfd-*) for refund/refund-failed webhooks.
+    attr_accessor :refund_id
+
+    attr_accessor :refund
 
     class EnumAttributeValidator
       attr_reader :datatype
@@ -79,9 +98,14 @@ module Api
         :'amount_refunded' => :'amountRefunded',
         :'currency' => :'currency',
         :'processed_at' => :'processedAt',
+        :'jamm_fee' => :'jammFee',
         :'created_at' => :'createdAt',
         :'updated_at' => :'updatedAt',
-        :'error' => :'error'
+        :'original_transaction_jamm_fee' => :'originalTransactionJammFee',
+        :'consumption_tax' => :'consumptionTax',
+        :'error' => :'error',
+        :'refund_id' => :'refundId',
+        :'refund' => :'refund'
       }
     end
 
@@ -104,9 +128,14 @@ module Api
         :'amount_refunded' => :'Integer',
         :'currency' => :'String',
         :'processed_at' => :'String',
+        :'jamm_fee' => :'Integer',
         :'created_at' => :'String',
         :'updated_at' => :'String',
-        :'error' => :'Apiv1Error'
+        :'original_transaction_jamm_fee' => :'String',
+        :'consumption_tax' => :'Integer',
+        :'error' => :'Apiv1Error',
+        :'refund_id' => :'String',
+        :'refund' => :'RefundInfo'
       }
     end
 
@@ -177,6 +206,10 @@ module Api
         self.processed_at = attributes[:'processed_at']
       end
 
+      if attributes.key?(:'jamm_fee')
+        self.jamm_fee = attributes[:'jamm_fee']
+      end
+
       if attributes.key?(:'created_at')
         self.created_at = attributes[:'created_at']
       end
@@ -185,8 +218,24 @@ module Api
         self.updated_at = attributes[:'updated_at']
       end
 
+      if attributes.key?(:'original_transaction_jamm_fee')
+        self.original_transaction_jamm_fee = attributes[:'original_transaction_jamm_fee']
+      end
+
+      if attributes.key?(:'consumption_tax')
+        self.consumption_tax = attributes[:'consumption_tax']
+      end
+
       if attributes.key?(:'error')
         self.error = attributes[:'error']
+      end
+
+      if attributes.key?(:'refund_id')
+        self.refund_id = attributes[:'refund_id']
+      end
+
+      if attributes.key?(:'refund')
+        self.refund = attributes[:'refund']
       end
     end
 
@@ -221,9 +270,14 @@ module Api
           amount_refunded == o.amount_refunded &&
           currency == o.currency &&
           processed_at == o.processed_at &&
+          jamm_fee == o.jamm_fee &&
           created_at == o.created_at &&
           updated_at == o.updated_at &&
-          error == o.error
+          original_transaction_jamm_fee == o.original_transaction_jamm_fee &&
+          consumption_tax == o.consumption_tax &&
+          error == o.error &&
+          refund_id == o.refund_id &&
+          refund == o.refund
     end
 
     # @see the `==` method
@@ -235,7 +289,7 @@ module Api
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, customer, status, description, merchant_name, initial_amount, discount, final_amount, amount_refunded, currency, processed_at, created_at, updated_at, error].hash
+      [id, customer, status, description, merchant_name, initial_amount, discount, final_amount, amount_refunded, currency, processed_at, jamm_fee, created_at, updated_at, original_transaction_jamm_fee, consumption_tax, error, refund_id, refund].hash
     end
 
     # Builds the object from hash

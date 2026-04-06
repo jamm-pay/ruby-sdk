@@ -50,6 +50,8 @@ module Api
 
     attr_accessor :charge_status
 
+    attr_accessor :error
+
     class EnumAttributeValidator
       attr_reader :datatype
       attr_reader :allowable_values
@@ -90,7 +92,8 @@ module Api
         :'created_at' => :'createdAt',
         :'updated_at' => :'updatedAt',
         :'processed_at' => :'processedAt',
-        :'charge_status' => :'chargeStatus'
+        :'charge_status' => :'chargeStatus',
+        :'error' => :'error'
       }
     end
 
@@ -117,7 +120,8 @@ module Api
         :'created_at' => :'Time',
         :'updated_at' => :'Time',
         :'processed_at' => :'Time',
-        :'charge_status' => :'ChargeStatus'
+        :'charge_status' => :'ChargeStatus',
+        :'error' => :'ChargeError'
       }
     end
 
@@ -209,6 +213,10 @@ module Api
       else
         self.charge_status = 'CHARGE_STATUS_UNSPECIFIED'
       end
+
+      if attributes.key?(:'error')
+        self.error = attributes[:'error']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -246,7 +254,8 @@ module Api
           created_at == o.created_at &&
           updated_at == o.updated_at &&
           processed_at == o.processed_at &&
-          charge_status == o.charge_status
+          charge_status == o.charge_status &&
+          error == o.error
     end
 
     # @see the `==` method
@@ -258,7 +267,7 @@ module Api
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [charge_id, paid, reason, description, merchant_name, initial_amount, discount, final_amount, amount_refunded, currency, token_id, metadata, created_at, updated_at, processed_at, charge_status].hash
+      [charge_id, paid, reason, description, merchant_name, initial_amount, discount, final_amount, amount_refunded, currency, token_id, metadata, created_at, updated_at, processed_at, charge_status, error].hash
     end
 
     # Builds the object from hash

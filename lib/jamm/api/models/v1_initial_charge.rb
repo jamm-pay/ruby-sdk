@@ -19,11 +19,14 @@ module Api
     # Amount of the charge in Japanese Yen. The amount must be the total price of the product/service including tax.  決済金額。日本円で指定してください。 金額は商品/サービスの合計金額 (税込) を指定してください。  @gotags: validate:\"gte=1,lte=500000\"
     attr_accessor :price
 
-    # Description is an arbitrary string for merchant to track the charge. This information is displayed on Merchant Dashboard.  決済の説明。ショップが決済を追跡するための任意の文字列です。  @gotags: validate:\"required\"
+    # Description is an arbitrary string for merchant to track the charge. This information is displayed on Merchant Dashboard.  決済の説明。ショップが決済を追跡するための任意の文字列です。  @gotags: validate:\"required,max=1024\"
     attr_accessor :description
 
     # Arbitrary key-value additional information about the charge. You can see this information in our merchant dashboard.  Chargeに関する任意のキーと値の追加情報。 加盟店ダッシュボードで確認できます。
     attr_accessor :metadata
+
+    # Fee charged by the platform (in JPY). Must be >= the Jamm fee for the merchant. Only meaningful when the caller is a platform. Ignored for direct merchant calls.  プラットフォームが徴収する手数料（日本円）。加盟店のJamm手数料以上である必要があります。
+    attr_accessor :platform_fee
 
     # Merchant can optionally set the expiry date for the payment. Defaults to 90 minutes if not specified.  決済の有効期限。未指定の場合は90分後に自動失効します。
     attr_accessor :expires_at
@@ -34,6 +37,7 @@ module Api
         :'price' => :'price',
         :'description' => :'description',
         :'metadata' => :'metadata',
+        :'platform_fee' => :'platformFee',
         :'expires_at' => :'expiresAt'
       }
     end
@@ -49,6 +53,7 @@ module Api
         :'price' => :'Integer',
         :'description' => :'String',
         :'metadata' => :'Hash<String, String>',
+        :'platform_fee' => :'Integer',
         :'expires_at' => :'Time'
       }
     end
@@ -88,6 +93,10 @@ module Api
         end
       end
 
+      if attributes.key?(:'platform_fee')
+        self.platform_fee = attributes[:'platform_fee']
+      end
+
       if attributes.key?(:'expires_at')
         self.expires_at = attributes[:'expires_at']
       end
@@ -116,6 +125,7 @@ module Api
           price == o.price &&
           description == o.description &&
           metadata == o.metadata &&
+          platform_fee == o.platform_fee &&
           expires_at == o.expires_at
     end
 
@@ -128,7 +138,7 @@ module Api
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [price, description, metadata, expires_at].hash
+      [price, description, metadata, platform_fee, expires_at].hash
     end
 
     # Builds the object from hash
