@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 
 gemspec
 
+gem 'base64', '~> 0.2'
 gem 'rest-client', '~> 2.0'
 gem 'typhoeus', '~> 1.0', '>= 1.0.1'
 

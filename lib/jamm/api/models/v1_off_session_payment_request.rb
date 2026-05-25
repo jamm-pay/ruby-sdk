@@ -14,7 +14,7 @@ require 'date'
 require 'time'
 
 module Api
-  # This message represents a request to process a payment directly within the application. It contains the customer ID and charge details to be processed.
+  # This message represents a request to process a payment directly within the application. It contains the customer ID and charge details to be processed. Supports triggerError in charge.metadata for test error simulation. See InitialCharge.metadata.
   class OffSessionPaymentRequest
     attr_accessor :customer
 

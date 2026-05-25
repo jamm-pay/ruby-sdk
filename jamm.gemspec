@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://jamm-pay.jp'
   s.license     = 'MIT'
 
+  s.add_dependency('base64', '~> 0.2')
   s.add_dependency('rest-client', '~> 2.0')
   s.add_dependency('typhoeus', '~> 1.0', '>= 1.0.1')
 

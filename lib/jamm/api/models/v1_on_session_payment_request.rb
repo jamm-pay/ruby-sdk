@@ -14,7 +14,7 @@ require 'date'
 require 'time'
 
 module Api
-  # Request message for the unified payment interface. The system intelligently routes the request to the appropriate payment method based on the provided parameters.
+  # Request message for the unified payment interface. The system intelligently routes the request to the appropriate payment method based on the provided parameters. Supports triggerError for test error simulation via the core InitiatePayment/ApprovePayment flow. See InitialCharge.metadata for details on behavior differences by stage.
   class OnSessionPaymentRequest
     attr_accessor :customer
 

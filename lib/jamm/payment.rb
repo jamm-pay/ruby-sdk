@@ -3,6 +3,7 @@
 require 'rest-client'
 require 'json'
 require 'base64'
+require 'securerandom'
 require 'jamm/errors'
 
 module Jamm
@@ -46,6 +47,29 @@ module Jamm
 
       handler = Jamm::Client.handler(merchant: merchant)
       Jamm::OpenAPI::PaymentApi.new(handler).off_session_payment(request)
+    rescue Jamm::OpenAPI::ApiError => e
+      raise Jamm::ApiError.from_error(e)
+    end
+
+    # Auto-fills idempotency_key with a UUID when the caller did not supply one,
+    # so every async charge is retry-safe by default. A caller-supplied key is
+    # left untouched so explicit retries reuse the same value.
+    def self.off_session_async(customer:, charge:, idempotency_key: nil, merchant: nil)
+      key =
+        if idempotency_key.nil? || idempotency_key.strip.empty?
+          SecureRandom.uuid
+        else
+          idempotency_key
+        end
+
+      request = Jamm::OpenAPI::OffSessionPaymentAsyncRequest.new(
+        customer: customer,
+        charge: charge,
+        idempotency_key: key
+      )
+
+      handler = Jamm::Client.handler(merchant: merchant)
+      Jamm::OpenAPI::PaymentApi.new(handler).async_off_session_payment(request)
     rescue Jamm::OpenAPI::ApiError => e
       raise Jamm::ApiError.from_error(e)
     end

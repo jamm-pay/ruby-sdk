@@ -14,7 +14,7 @@ require 'date'
 require 'time'
 
 module Api
-  # This message represents a request to withdraw money from a customer. It contains the customer ID and the amount to withdraw.
+  # This message represents a request to withdraw money from a customer. It contains the customer ID and the amount to withdraw. Supports triggerError in charge.metadata for test error simulation. See InitialCharge.metadata.
   class WithdrawRequest
     attr_accessor :customer
 

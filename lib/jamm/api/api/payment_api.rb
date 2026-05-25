@@ -89,7 +89,7 @@ module Api
 
     # Initiate async off-session payment
     # Starts asynchronous off-session payment processing and returns request tracking information.
-    # @param body [OffSessionPaymentAsyncRequest] This message represents a request to process an off-session payment asynchronously. It contains the customer ID and the amount to charge.
+    # @param body [OffSessionPaymentAsyncRequest] This message represents a request to process an off-session payment asynchronously. It contains the customer ID and the amount to charge. Supports triggerError in charge.metadata for test error simulation. See InitialCharge.metadata.
     # @param [Hash] opts the optional parameters
     # @return [OffSessionPaymentAsyncResponse]
     def async_off_session_payment(body, opts = {})
@@ -99,7 +99,7 @@ module Api
 
     # Initiate async off-session payment
     # Starts asynchronous off-session payment processing and returns request tracking information.
-    # @param body [OffSessionPaymentAsyncRequest] This message represents a request to process an off-session payment asynchronously. It contains the customer ID and the amount to charge.
+    # @param body [OffSessionPaymentAsyncRequest] This message represents a request to process an off-session payment asynchronously. It contains the customer ID and the amount to charge. Supports triggerError in charge.metadata for test error simulation. See InitialCharge.metadata.
     # @param [Hash] opts the optional parameters
     # @return [Array<(OffSessionPaymentAsyncResponse, Integer, Hash)>] OffSessionPaymentAsyncResponse data, response status code and response headers
     def async_off_session_payment_with_http_info(body, opts = {})
@@ -425,7 +425,7 @@ module Api
 
     # Initiate async withdraw (internal)
     # Internal-only endpoint for initiating asynchronous withdrawal processing.
-    # @param body [WithdrawAsyncRequest] This message represents a request to withdraw money from a customer asynchronously. It contains the customer ID and the amount to withdraw.
+    # @param body [WithdrawAsyncRequest] This message represents a request to withdraw money from a customer asynchronously. It contains the customer ID and the amount to withdraw. Supports triggerError in charge.metadata for test error simulation. See InitialCharge.metadata.
     # @param [Hash] opts the optional parameters
     # @return [WithdrawAsyncResponse]
     def internal_withdraw_async(body, opts = {})
@@ -435,7 +435,7 @@ module Api
 
     # Initiate async withdraw (internal)
     # Internal-only endpoint for initiating asynchronous withdrawal processing.
-    # @param body [WithdrawAsyncRequest] This message represents a request to withdraw money from a customer asynchronously. It contains the customer ID and the amount to withdraw.
+    # @param body [WithdrawAsyncRequest] This message represents a request to withdraw money from a customer asynchronously. It contains the customer ID and the amount to withdraw. Supports triggerError in charge.metadata for test error simulation. See InitialCharge.metadata.
     # @param [Hash] opts the optional parameters
     # @return [Array<(WithdrawAsyncResponse, Integer, Hash)>] WithdrawAsyncResponse data, response status code and response headers
     def internal_withdraw_async_with_http_info(body, opts = {})
@@ -561,7 +561,7 @@ module Api
 
     # Process payment directly without redirect
     # Execute a payment off-session within your application without redirecting to a payment page.
-    # @param body [OffSessionPaymentRequest] This message represents a request to process a payment directly within the application. It contains the customer ID and charge details to be processed.
+    # @param body [OffSessionPaymentRequest] This message represents a request to process a payment directly within the application. It contains the customer ID and charge details to be processed. Supports triggerError in charge.metadata for test error simulation. See InitialCharge.metadata.
     # @param [Hash] opts the optional parameters
     # @return [OffSessionPaymentResponse]
     def off_session_payment(body, opts = {})
@@ -571,7 +571,7 @@ module Api
 
     # Process payment directly without redirect
     # Execute a payment off-session within your application without redirecting to a payment page.
-    # @param body [OffSessionPaymentRequest] This message represents a request to process a payment directly within the application. It contains the customer ID and charge details to be processed.
+    # @param body [OffSessionPaymentRequest] This message represents a request to process a payment directly within the application. It contains the customer ID and charge details to be processed. Supports triggerError in charge.metadata for test error simulation. See InitialCharge.metadata.
     # @param [Hash] opts the optional parameters
     # @return [Array<(OffSessionPaymentResponse, Integer, Hash)>] OffSessionPaymentResponse data, response status code and response headers
     def off_session_payment_with_http_info(body, opts = {})
@@ -629,7 +629,7 @@ module Api
 
     # Process payment with optional redirect
     # Unified interface for creating payments - supports existing customers, new customers with charges, and contract-only creation.
-    # @param body [OnSessionPaymentRequest] Request message for the unified payment interface. The system intelligently routes the request to the appropriate payment method based on the provided parameters.
+    # @param body [OnSessionPaymentRequest] Request message for the unified payment interface. The system intelligently routes the request to the appropriate payment method based on the provided parameters. Supports triggerError for test error simulation via the core InitiatePayment/ApprovePayment flow. See InitialCharge.metadata for details on behavior differences by stage.
     # @param [Hash] opts the optional parameters
     # @return [OnSessionPaymentResponse]
     def on_session_payment(body, opts = {})
@@ -639,7 +639,7 @@ module Api
 
     # Process payment with optional redirect
     # Unified interface for creating payments - supports existing customers, new customers with charges, and contract-only creation.
-    # @param body [OnSessionPaymentRequest] Request message for the unified payment interface. The system intelligently routes the request to the appropriate payment method based on the provided parameters.
+    # @param body [OnSessionPaymentRequest] Request message for the unified payment interface. The system intelligently routes the request to the appropriate payment method based on the provided parameters. Supports triggerError for test error simulation via the core InitiatePayment/ApprovePayment flow. See InitialCharge.metadata for details on behavior differences by stage.
     # @param [Hash] opts the optional parameters
     # @return [Array<(OnSessionPaymentResponse, Integer, Hash)>] OnSessionPaymentResponse data, response status code and response headers
     def on_session_payment_with_http_info(body, opts = {})
@@ -765,7 +765,7 @@ module Api
 
     # Withdraw money from customer immediately, without redirect
     # This call is synchronous. The money will be withdrawn immediately.
-    # @param body [WithdrawRequest] This message represents a request to withdraw money from a customer. It contains the customer ID and the amount to withdraw.
+    # @param body [WithdrawRequest] This message represents a request to withdraw money from a customer. It contains the customer ID and the amount to withdraw. Supports triggerError in charge.metadata for test error simulation. See InitialCharge.metadata.
     # @param [Hash] opts the optional parameters
     # @return [WithdrawResponse]
     def withdraw(body, opts = {})
@@ -775,7 +775,7 @@ module Api
 
     # Withdraw money from customer immediately, without redirect
     # This call is synchronous. The money will be withdrawn immediately.
-    # @param body [WithdrawRequest] This message represents a request to withdraw money from a customer. It contains the customer ID and the amount to withdraw.
+    # @param body [WithdrawRequest] This message represents a request to withdraw money from a customer. It contains the customer ID and the amount to withdraw. Supports triggerError in charge.metadata for test error simulation. See InitialCharge.metadata.
     # @param [Hash] opts the optional parameters
     # @return [Array<(WithdrawResponse, Integer, Hash)>] WithdrawResponse data, response status code and response headers
     def withdraw_with_http_info(body, opts = {})
