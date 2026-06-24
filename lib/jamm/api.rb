@@ -19,6 +19,7 @@ require 'jamm/api/configuration'
 # Models
 require 'jamm/api/models/apiv1_error'
 require 'jamm/api/models/apiv1_status'
+require 'jamm/api/models/charge_message_api_source'
 require 'jamm/api/models/customer_service_update_customer_body'
 require 'jamm/api/models/googlerpc_status'
 require 'jamm/api/models/protobuf_any'

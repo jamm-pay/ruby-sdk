@@ -17,7 +17,7 @@ module Api
   # RefundInfo contains refund-specific details for refund and refund_failed webhook events.
   class RefundInfo
     # External refund identifier (rfd-*).
-    attr_accessor :refund_id
+    attr_accessor :id
 
     # Amount refunded for this event.
     attr_accessor :amount_refunded
@@ -39,7 +39,7 @@ module Api
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
-        :'refund_id' => :'refundId',
+        :'id' => :'id',
         :'amount_refunded' => :'amountRefunded',
         :'jamm_fee' => :'jammFee',
         :'consumption_tax' => :'consumptionTax',
@@ -57,7 +57,7 @@ module Api
     # Attribute type mapping.
     def self.openapi_types
       {
-        :'refund_id' => :'String',
+        :'id' => :'String',
         :'amount_refunded' => :'Integer',
         :'jamm_fee' => :'Integer',
         :'consumption_tax' => :'Integer',
@@ -88,8 +88,8 @@ module Api
         h[k.to_sym] = v
       }
 
-      if attributes.key?(:'refund_id')
-        self.refund_id = attributes[:'refund_id']
+      if attributes.key?(:'id')
+        self.id = attributes[:'id']
       end
 
       if attributes.key?(:'amount_refunded')
@@ -137,7 +137,7 @@ module Api
     def ==(o)
       return true if self.equal?(o)
       self.class == o.class &&
-          refund_id == o.refund_id &&
+          id == o.id &&
           amount_refunded == o.amount_refunded &&
           jamm_fee == o.jamm_fee &&
           consumption_tax == o.consumption_tax &&
@@ -155,7 +155,7 @@ module Api
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [refund_id, amount_refunded, jamm_fee, consumption_tax, original_transaction_fee_waived, error, processed_at].hash
+      [id, amount_refunded, jamm_fee, consumption_tax, original_transaction_fee_waived, error, processed_at].hash
     end
 
     # Builds the object from hash
