@@ -62,8 +62,6 @@ module Api
 
     attr_accessor :refund
 
-    attr_accessor :api_source
-
     class EnumAttributeValidator
       attr_reader :datatype
       attr_reader :allowable_values
@@ -107,8 +105,7 @@ module Api
         :'consumption_tax' => :'consumptionTax',
         :'error' => :'error',
         :'refund_id' => :'refundId',
-        :'refund' => :'refund',
-        :'api_source' => :'apiSource'
+        :'refund' => :'refund'
       }
     end
 
@@ -138,8 +135,7 @@ module Api
         :'consumption_tax' => :'Integer',
         :'error' => :'Apiv1Error',
         :'refund_id' => :'String',
-        :'refund' => :'RefundInfo',
-        :'api_source' => :'ChargeMessageApiSource'
+        :'refund' => :'RefundInfo'
       }
     end
 
@@ -241,12 +237,6 @@ module Api
       if attributes.key?(:'refund')
         self.refund = attributes[:'refund']
       end
-
-      if attributes.key?(:'api_source')
-        self.api_source = attributes[:'api_source']
-      else
-        self.api_source = 'API_SOURCE_UNSPECIFIED'
-      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -287,8 +277,7 @@ module Api
           consumption_tax == o.consumption_tax &&
           error == o.error &&
           refund_id == o.refund_id &&
-          refund == o.refund &&
-          api_source == o.api_source
+          refund == o.refund
     end
 
     # @see the `==` method
@@ -300,7 +289,7 @@ module Api
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, customer, status, description, merchant_name, initial_amount, discount, final_amount, amount_refunded, currency, processed_at, jamm_fee, created_at, updated_at, original_transaction_jamm_fee, consumption_tax, error, refund_id, refund, api_source].hash
+      [id, customer, status, description, merchant_name, initial_amount, discount, final_amount, amount_refunded, currency, processed_at, jamm_fee, created_at, updated_at, original_transaction_jamm_fee, consumption_tax, error, refund_id, refund].hash
     end
 
     # Builds the object from hash

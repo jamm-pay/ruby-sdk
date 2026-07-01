@@ -5,21 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.3.0] - 2026-06-24
+## [2.4.0] - 2026-07-01
 
 ### Added
 
-- Resolve numeric enum wire values (`status`, `api_source`, …) onto their string enum constants on every webhook model, matching REST API responses (the backend serializes webhooks with `json.Marshal`, so all enums arrive numeric)
-- Surface the refund `rfd-` id on the flat `refund_id` attribute in addition to the nested `refund.id`
-- Parse `EVENT_TYPE_USER_ACCOUNT_DELETED` webhooks (previously raised `Unknown event type`)
-
-### Fixed
-
-- Webhook parsing no longer fails on new fields added by the backend (forward-compatible)
-- Refund webhooks now expose the nested transaction fields and the refund's `rfd-` id (`refund.id`)
-- `status` on refund/charge webhooks is no longer left as a raw integer
-- Nested webhook fields (e.g. `refund.error`) are now typed model instances instead of raw Hashes, so `error.code` / `error.message` work instead of raising `NoMethodError`
-- `Webhook.parse` now accepts payloads with either string or symbol keys
+- Send the `X-SDK-Version` request header (`ruby:<version>`) so the backend can track SDK version usage per merchant
 
 ## [2.2.0] - 2026-05-20
 

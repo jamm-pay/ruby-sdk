@@ -9,6 +9,7 @@ module Jamm
       base.config.host = Jamm.openapi.config.host
       base.config.scheme = Jamm.openapi.config.scheme
       base.default_headers['Authorization'] = "Bearer #{Jamm::OAuth.token}"
+      base.default_headers['X-SDK-Version'] = "ruby:#{Jamm::VERSION}"
 
       # Platform feature, optionally set merchant id to call Jamm API
       # on behalf of the merchant.
