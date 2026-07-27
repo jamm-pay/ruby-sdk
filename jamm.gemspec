@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
 
   s.files = `git ls-files`.split("\n").reject do |file|
     file.start_with?(
+      'compatibility',
       'examples',
       'images',
       'openapi',

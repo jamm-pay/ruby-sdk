@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.0] - 2026-07-22
+
+### Fixed
+
+- Restored the forward-compatible `Jamm::Webhook.parse` first shipped in 2.3.0 (2.4.0 and 2.5.0 regressed to strict parsing):
+  - Webhook parsing no longer fails on new fields added by the backend (unknown fields are ignored instead of raising `ArgumentError`)
+  - Numeric enum wire values (`status`, …) resolve onto their string enum constants, matching REST API responses
+  - Refund webhooks expose the nested transaction fields, the refund's `rfd-` id (`refund_id` and `refund.id`), and typed nested models (`refund.error.code` works instead of raising `NoMethodError`)
+  - `EVENT_TYPE_USER_ACCOUNT_DELETED` webhooks parse (previously raised `Unknown event type`)
+  - `Webhook.parse` accepts payloads with either string or symbol keys
+- `Webhook.parse` routes on the coerced event type, so event routing also survives a numeric `event_type` wire value
+
+## [2.5.0] - 2026-07-03
+
+### Added
+
+- Added `Jamm::Webhook.verify_and_parse(raw_body)` — verifies the HMAC signature over the exact received `content` bytes and parses in one step. Unlike `Jamm::Webhook.verify`, it is not broken by JSON re-serialization (correctly handles `&`, `<`, `>` in content) and rejects bodies with duplicate top-level keys.
+
 ## [2.4.0] - 2026-07-01
 
 ### Added
