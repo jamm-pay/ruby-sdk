@@ -25,6 +25,8 @@ module Api
 
     attr_accessor :refund_info
 
+    attr_accessor :refund_webhook_content
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
@@ -32,7 +34,8 @@ module Api
         :'charge_message' => :'chargeMessage',
         :'contract_message' => :'contractMessage',
         :'user_account_message' => :'userAccountMessage',
-        :'refund_info' => :'refundInfo'
+        :'refund_info' => :'refundInfo',
+        :'refund_webhook_content' => :'refundWebhookContent'
       }
     end
 
@@ -48,7 +51,8 @@ module Api
         :'charge_message' => :'ChargeMessage',
         :'contract_message' => :'ContractMessage',
         :'user_account_message' => :'UserAccountMessage',
-        :'refund_info' => :'RefundInfo'
+        :'refund_info' => :'RefundInfo',
+        :'refund_webhook_content' => :'RefundWebhookContent'
       }
     end
 
@@ -92,6 +96,10 @@ module Api
       if attributes.key?(:'refund_info')
         self.refund_info = attributes[:'refund_info']
       end
+
+      if attributes.key?(:'refund_webhook_content')
+        self.refund_webhook_content = attributes[:'refund_webhook_content']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -118,7 +126,8 @@ module Api
           charge_message == o.charge_message &&
           contract_message == o.contract_message &&
           user_account_message == o.user_account_message &&
-          refund_info == o.refund_info
+          refund_info == o.refund_info &&
+          refund_webhook_content == o.refund_webhook_content
     end
 
     # @see the `==` method
@@ -130,7 +139,7 @@ module Api
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [merchant_webhook_message, charge_message, contract_message, user_account_message, refund_info].hash
+      [merchant_webhook_message, charge_message, contract_message, user_account_message, refund_info, refund_webhook_content].hash
     end
 
     # Builds the object from hash

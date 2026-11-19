@@ -35,38 +35,72 @@ module Jamm
   # - Jamm:    code is string, message is string originating from Jamm's protobuf definition.
   # - OpenAPI: code is integer, message is string originating from ConnectRPC error format.
   class ApiError < StandardError
-    attr_reader :code, :error_code, :error_type, :message, :headers, :body
+    # error_type is kept for compatibility (it reads ERROR_TYPE_UNSPECIFIED for REST answers); use api_error_type.
+    attr_reader :code, :error_code, :error_type, :api_error_type, :charge_id, :message, :headers, :body
+
+    VALUE_DETAIL = 'type.googleapis.com/google.protobuf.Value'
+    CHARGE_PENDING_DETAIL = 'type.googleapis.com/api.v1.ChargePendingDetail'
+    private_constant :VALUE_DETAIL, :CHARGE_PENDING_DETAIL
 
     # Add this class method to convert StandardError to ApiError
     def self.from_error(e)
-      error_type = Api::ErrorType::UNSPECIFIED
-
-      # Convert Protobuf oriented error to error type.
-      details = JSON.parse(e.response_body)['details']
-
-      if details.is_a?(Array) && details.any?
-        details.each do |d|
-          # Loop through all error types to find a match
-          Api::ErrorType.all_vars.each do |type|
-            error_type = type.to_s if d['debug'] == type.to_s
-          end
-        end
-      end
+      details = parse_details(e.response_body)
 
       new(
         code: e.code,
         message: e.message,
-        error_type: error_type,
+        error_type: legacy_error_type_from(details),
+        api_error_type: api_error_type_from(details),
+        charge_id: charge_id_from(details),
         response_headers: e.response_headers,
         response_body: e.response_body
       )
     end
+
+    # A connection timeout has no body, and a proxy error page isn't JSON: keep the real error.
+    def self.parse_details(body)
+      parsed = body.is_a?(Hash) ? body : JSON.parse(body.to_s)
+      return [] unless parsed.is_a?(Hash) && parsed['details'].is_a?(Array)
+
+      parsed['details'].select { |d| d.is_a?(Hash) }
+    rescue JSON::ParserError, TypeError
+      []
+    end
+
+    # error_type keeps its historic rule (a known type in `debug`), which REST answers never match.
+    def self.legacy_error_type_from(details)
+      error_type = Api::ErrorType::UNSPECIFIED
+      details.each do |d|
+        Api::ErrorType.all_vars.each { |type| error_type = type.to_s if d['debug'] == type.to_s }
+      end
+      error_type
+    end
+
+    # REST answers carry the type as a google.protobuf.Value detail, Connect as `debug`.
+    # An unknown ERROR_TYPE_* passes through, so a newer server's type isn't lost.
+    def self.api_error_type_from(details)
+      details.each do |d|
+        type = d['@type'] == VALUE_DETAIL ? d['value'] : d['debug']
+        return type if type.is_a?(String) && type.start_with?('ERROR_TYPE_')
+      end
+      Api::ErrorType::UNSPECIFIED
+    end
+
+    # The charge ID of a pending sync charge (outcome unknown): retry only with the same idempotency_key.
+    def self.charge_id_from(details)
+      pending = details.find { |d| d['@type'] == CHARGE_PENDING_DETAIL }
+      id = pending && pending['chargeId']
+      id.is_a?(String) && !id.empty? ? id : nil
+    end
+    private_class_method :parse_details, :legacy_error_type_from, :api_error_type_from, :charge_id_from
 
     def initialize(args = {})
       # Check code existence and convert to string if it's integer
       @code = args[:code]
       @message = args[:message]
       @error_type = args[:error_type]
+      @api_error_type = args[:api_error_type]
+      @charge_id = args[:charge_id]
       @headers = args[:response_headers]
 
       raw_body = if args[:response_body].nil?
@@ -75,7 +109,8 @@ module Jamm
                    args[:response_body]
                  elsif args[:response_body].is_a?(String)
                    begin
-                     JSON.parse(args[:response_body])
+                     parsed = JSON.parse(args[:response_body])
+                     parsed.is_a?(Hash) ? parsed : {}
                    rescue StandardError
                      {}
                    end

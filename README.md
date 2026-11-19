@@ -59,6 +59,21 @@ payment = Jamm::Payment.create(
 )
 ```
 
+## Errors
+
+Most API calls raise `Jamm::ApiError` on failure, with the HTTP status in `code` and the error type in `api_error_type`
+(e.g. `ERROR_TYPE_PAYMENT_VALIDATION_FAILED`). Use `api_error_type`: `error_type` reads
+`ERROR_TYPE_UNSPECIFIED` for REST answers and is kept only for compatibility. The generated clients under
+`Jamm::OpenAPI` raise `Jamm::OpenAPI::ApiError`; convert it to read the same fields:
+
+```ruby
+begin
+  Jamm::OpenAPI::PaymentApi.new(Jamm::Client.handler).withdraw(request)
+rescue Jamm::OpenAPI::ApiError => e
+  raise Jamm::ApiError.from_error(e)
+end
+```
+
 ## Installation
 ```sh
 gem install jamm
@@ -67,6 +82,30 @@ If you want to build the gem from source:
 ```sh
 gem build jamm.gemspec
 ```
+
+## API version
+
+Every request to the Jamm API carries a `Jamm-API-Version` header. It defaults to
+the dated API version this SDK was built against, exposed as `Jamm::API_VERSION`.
+You can pin an older version with `api_version:` in `Jamm.configure`; a newer one
+requires upgrading the SDK. Nil or empty means `Jamm::API_VERSION`.
+
+```ruby
+Jamm.configure(client_id: '...', client_secret: '...', env: 'production', api_version: '2026-08-26')
+```
+
+The API rejects a version it no longer serves; the error lists the versions it does. Responses to a pinned older version follow that version's shape, so fields added since come back empty in this SDK's types.
+
+Every versioned response echoes what served it in two headers:
+`Jamm-API-Version` is the version, and `Jamm-API-Version-Source` is how it was
+chosen: `header` (the version this SDK sent), `pin` (your account's pinned
+version), `default` (no header, and no pin we could read), or `forced` (Jamm
+temporarily served its newest shape, which no dated version describes, so
+`Jamm-API-Version` is omitted). A request rejected before a version is chosen
+carries neither.
+
+OAuth2 token requests are excluded: they go to the identity service, which is
+not versioned.
 
 ## Development
 Test cases can be run with: `bundle exec rake`

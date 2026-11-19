@@ -20,11 +20,15 @@ module Api
 
     attr_accessor :charge
 
+    # Merchant-supplied idempotency key for retry safety. Not enabled yet: a request with a key is rejected with 400. ASCII only, 1-255 chars matching ^[a-zA-Z0-9_\\-]{1,255}$.
+    attr_accessor :idempotency_key
+
     # Attribute mapping from ruby-style variable name to JSON key.
     def self.attribute_map
       {
         :'customer' => :'customer',
-        :'charge' => :'charge'
+        :'charge' => :'charge',
+        :'idempotency_key' => :'idempotencyKey'
       }
     end
 
@@ -37,7 +41,8 @@ module Api
     def self.openapi_types
       {
         :'customer' => :'String',
-        :'charge' => :'InitialCharge'
+        :'charge' => :'InitialCharge',
+        :'idempotency_key' => :'String'
       }
     end
 
@@ -69,6 +74,10 @@ module Api
       if attributes.key?(:'charge')
         self.charge = attributes[:'charge']
       end
+
+      if attributes.key?(:'idempotency_key')
+        self.idempotency_key = attributes[:'idempotency_key']
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -92,7 +101,8 @@ module Api
       return true if self.equal?(o)
       self.class == o.class &&
           customer == o.customer &&
-          charge == o.charge
+          charge == o.charge &&
+          idempotency_key == o.idempotency_key
     end
 
     # @see the `==` method
@@ -104,7 +114,7 @@ module Api
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [customer, charge].hash
+      [customer, charge, idempotency_key].hash
     end
 
     # Builds the object from hash
