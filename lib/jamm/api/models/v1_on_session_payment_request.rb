@@ -16,6 +16,7 @@ require 'time'
 module Api
   # Request message for the unified payment interface. The system intelligently routes the request to the appropriate payment method based on the provided parameters. Supports triggerError for test error simulation via the core InitiatePayment/ApprovePayment flow. See InitialCharge.metadata for details on behavior differences by stage.
   class OnSessionPaymentRequest
+    # Optional customer ID for an existing merchant customer (cus- prefix). Identifies the subject. With a charge, an active contract is charged; without one, the buyer re-approves a new contract for this same customer. Buyer fields other than email overlay the stored customer.
     attr_accessor :customer
 
     attr_accessor :buyer
@@ -24,6 +25,9 @@ module Api
 
     # Defaults to false if not provided. If true, the charge is processed as a one-time payment and no contract is created. If provided without a customer ID, the system will create a new customer. Requires charge to be present.  未指定の場合はfalseがデフォルトです。 trueの場合、決済は一回限りの支払いとして処理され、契約は作成されません。 customer IDが提供されていない場合、新規顧客が作成されます。 chargeが必須です。
     attr_accessor :one_time
+
+    # Optional. Same (merchant, key) returns the original payment link; same key with different params is rejected. Absent: new session each call. ASCII 1-255 matching ^[a-zA-Z0-9_\\-]{1,255}$.
+    attr_accessor :idempotency_key
 
     attr_accessor :redirect
 
@@ -34,6 +38,7 @@ module Api
         :'buyer' => :'buyer',
         :'charge' => :'charge',
         :'one_time' => :'oneTime',
+        :'idempotency_key' => :'idempotencyKey',
         :'redirect' => :'redirect'
       }
     end
@@ -50,6 +55,7 @@ module Api
         :'buyer' => :'Buyer',
         :'charge' => :'InitialCharge',
         :'one_time' => :'Boolean',
+        :'idempotency_key' => :'String',
         :'redirect' => :'URL'
       }
     end
@@ -91,6 +97,10 @@ module Api
         self.one_time = attributes[:'one_time']
       end
 
+      if attributes.key?(:'idempotency_key')
+        self.idempotency_key = attributes[:'idempotency_key']
+      end
+
       if attributes.key?(:'redirect')
         self.redirect = attributes[:'redirect']
       end
@@ -120,6 +130,7 @@ module Api
           buyer == o.buyer &&
           charge == o.charge &&
           one_time == o.one_time &&
+          idempotency_key == o.idempotency_key &&
           redirect == o.redirect
     end
 
@@ -132,7 +143,7 @@ module Api
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [customer, buyer, charge, one_time, redirect].hash
+      [customer, buyer, charge, one_time, idempotency_key, redirect].hash
     end
 
     # Builds the object from hash

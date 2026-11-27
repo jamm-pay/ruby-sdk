@@ -66,16 +66,30 @@ module Jamm
     def self.build(klass, attributes)
       return nil if attributes.nil?
 
-      known = klass.attribute_map
       types = klass.openapi_types
       filtered = attributes.each_with_object({}) do |(key, value), acc|
-        sym = key.to_sym
-        next unless known.key?(sym)
+        sym = attribute_for(klass, key)
+        next if sym.nil?
 
         acc[sym] = coerce(types[sym], value)
       end
 
       klass.new(filtered)
+    end
+
+    # attribute_map is { snake_symbol => jsonCamelName }; accept either
+    # spelling. Both cannot arrive together; the last would win.
+    def self.attribute_for(klass, key)
+      sym = key.to_sym
+      return sym if klass.attribute_map.key?(sym)
+
+      by_serialized(klass)[sym]
+    end
+
+    # Memoised per class: Hash#key is a linear scan, paid once per field otherwise.
+    def self.by_serialized(klass)
+      @by_serialized ||= {}
+      @by_serialized[klass] ||= klass.attribute_map.invert
     end
 
     # Refund webhooks (REFUND_SUCCEEDED / REFUND_FAILED) deliver `content` as a

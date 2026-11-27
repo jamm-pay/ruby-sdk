@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [2.8.0] - 2026-11-19
+
+### Added
+
+- `Jamm::ApiError#api_error_type`: the error type of any API error, e.g. `ERROR_TYPE_PAYMENT_VALIDATION_FAILED`. Use it instead of `error_type`, which reads `ERROR_TYPE_UNSPECIFIED` for REST answers and is unchanged for compatibility. A type this SDK doesn't know yet is passed through as its string.
+- `Jamm::ApiError#charge_id`: the charge ID on an `ERROR_TYPE_PAYMENT_CHARGE_PENDING` answer (outcome not known yet; not returned by the API yet). Retry only with the same `idempotency_key`, or wait for the webhook.
+- `Jamm::Payment.off_session(..., idempotency_key:)`: an optional key that makes a sync charge retry-safe once it is enabled for your merchant (until then a request with a key is rejected). Nothing is sent when it is `nil` or blank; unlike `off_session_async`, no key is generated for you.
+- `amount_refunded_net_discounts` on the refund webhook `refund` — the amount returned to the buyer for this refund (`amount_refunded` minus its share of the charge discount). Sent on `REFUND_SUCCEEDED` only.
+
+### Fixed
+
+- `Jamm::ApiError.from_error` no longer raises (`TypeError`, `JSON::ParserError` or `NoMethodError`) when the response body is missing, isn't JSON, or isn't a JSON object: a connection timeout has no body, and a proxy error page isn't JSON. The original error is kept.
+
+## [2.7.0] - 2026-10-05
+
+### Added
+
+- Every request to the Jamm API (not OAuth token requests) sends a `Jamm-API-Version` header defaulting to the API version this SDK was built for (`Jamm::API_VERSION`). To stay on an older version, pass `api_version:` to `Jamm.configure`; a newer one needs an SDK upgrade.
+- New error type `ERROR_TYPE_PAYMENT_CHARGE_OVER_DAILY_LIMIT`: the charge would exceed the daily limit of the buyer's bank account. Retry after midnight JST.
+- Charge webhooks expose `msg.content.metadata`, the map you set when creating the charge, on every charge and refund event. Keys are symbols (`metadata[:order_id]`), and it is `nil` when the charge has none.
+
+### Changed
+
+- The SDK version header is renamed from `X-SDK-Version` to `Jamm-SDK-Version`. If a proxy or firewall allowlists outgoing headers, add `Jamm-SDK-Version`.
+- Webhook parsing accepts both `snake_case` and `camelCase` field names, so a future change to the webhook format won't break it.
+
+### Deprecated
+
+- `ERROR_TYPE_CSV_DUPLICATE_USER` is no longer returned.
+
 ## [2.6.0] - 2026-07-22
 
 ### Fixed

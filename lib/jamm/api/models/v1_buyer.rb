@@ -46,7 +46,7 @@ module Api
     # Merchant can optionally set the expiry date for the contract. Defaults to 90 minutes if not specified.  決済の有効期限。未指定の場合は90分後に自動失効します。
     attr_accessor :expires_at
 
-    # Arbitrary key-value additional information about the customer. You can see this information in our merchant dashboard.  Customerに関する任意のキーと値の追加情報。 加盟店ダッシュボードで確認できます。
+    # Arbitrary key-value additional information about the customer. You can see this information in our merchant dashboard.  Customerに関する任意のキーと値の追加情報。 加盟店ダッシュボードで確認できます。 At most 50 entries; keys up to 64 and values up to 512 characters.  最大50件、キーは64文字、値は512文字までです。
     attr_accessor :metadata
 
     # Attribute mapping from ruby-style variable name to JSON key.

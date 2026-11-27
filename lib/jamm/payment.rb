@@ -39,11 +39,13 @@ module Jamm
       raise Jamm::ApiError.from_error(e)
     end
 
-    def self.off_session(customer:, charge:, merchant: nil)
+    # Sends idempotency_key only when given: unlike off_session_async, no key is generated.
+    def self.off_session(customer:, charge:, idempotency_key: nil, merchant: nil)
       request = Jamm::OpenAPI::OffSessionPaymentRequest.new(
         customer: customer,
         charge: charge
       )
+      request.idempotency_key = idempotency_key unless idempotency_key.nil? || idempotency_key.strip.empty?
 
       handler = Jamm::Client.handler(merchant: merchant)
       Jamm::OpenAPI::PaymentApi.new(handler).off_session_payment(request)

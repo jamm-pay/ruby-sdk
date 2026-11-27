@@ -62,6 +62,11 @@ module Api
 
     attr_accessor :refund
 
+    attr_accessor :api_source
+
+    # Merchant-supplied metadata attached to the charge at creation, echoed back verbatim. Omitted when the charge carries no metadata.
+    attr_accessor :metadata
+
     class EnumAttributeValidator
       attr_reader :datatype
       attr_reader :allowable_values
@@ -105,7 +110,9 @@ module Api
         :'consumption_tax' => :'consumptionTax',
         :'error' => :'error',
         :'refund_id' => :'refundId',
-        :'refund' => :'refund'
+        :'refund' => :'refund',
+        :'api_source' => :'apiSource',
+        :'metadata' => :'metadata'
       }
     end
 
@@ -135,7 +142,9 @@ module Api
         :'consumption_tax' => :'Integer',
         :'error' => :'Apiv1Error',
         :'refund_id' => :'String',
-        :'refund' => :'RefundInfo'
+        :'refund' => :'RefundInfo',
+        :'api_source' => :'ChargeMessageApiSource',
+        :'metadata' => :'Hash<String, String>'
       }
     end
 
@@ -237,6 +246,18 @@ module Api
       if attributes.key?(:'refund')
         self.refund = attributes[:'refund']
       end
+
+      if attributes.key?(:'api_source')
+        self.api_source = attributes[:'api_source']
+      else
+        self.api_source = 'API_SOURCE_UNSPECIFIED'
+      end
+
+      if attributes.key?(:'metadata')
+        if (value = attributes[:'metadata']).is_a?(Hash)
+          self.metadata = value
+        end
+      end
     end
 
     # Show invalid properties with the reasons. Usually used together with valid?
@@ -277,7 +298,9 @@ module Api
           consumption_tax == o.consumption_tax &&
           error == o.error &&
           refund_id == o.refund_id &&
-          refund == o.refund
+          refund == o.refund &&
+          api_source == o.api_source &&
+          metadata == o.metadata
     end
 
     # @see the `==` method
@@ -289,7 +312,7 @@ module Api
     # Calculates hash code according to all attributes.
     # @return [Integer] Hash code
     def hash
-      [id, customer, status, description, merchant_name, initial_amount, discount, final_amount, amount_refunded, currency, processed_at, jamm_fee, created_at, updated_at, original_transaction_jamm_fee, consumption_tax, error, refund_id, refund].hash
+      [id, customer, status, description, merchant_name, initial_amount, discount, final_amount, amount_refunded, currency, processed_at, jamm_fee, created_at, updated_at, original_transaction_jamm_fee, consumption_tax, error, refund_id, refund, api_source, metadata].hash
     end
 
     # Builds the object from hash

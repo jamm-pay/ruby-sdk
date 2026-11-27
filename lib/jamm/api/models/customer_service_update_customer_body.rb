@@ -34,7 +34,7 @@ module Api
 
     attr_accessor :gender
 
-    # Arbitrary key-value additional information about the customer. All the existing metadata will be overwritten by the new metadata.  Customerに関する任意のキーと値の追加情報。 すべての既存のメタデータは新しいメタデータで上書きされます。
+    # Arbitrary key-value additional information about the customer. All the existing metadata will be overwritten by the new metadata.  Customerに関する任意のキーと値の追加情報。 すべての既存のメタデータは新しいメタデータで上書きされます。 At most 50 entries; keys up to 64 and values up to 512 characters.  最大50件、キーは64文字、値は512文字までです。
     attr_accessor :metadata
 
     # Attribute mapping from ruby-style variable name to JSON key.
